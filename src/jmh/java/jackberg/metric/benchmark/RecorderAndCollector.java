@@ -6,9 +6,9 @@
 package jackberg.metric.benchmark;
 
 interface RecorderAndCollector {
-  default void setup(MetricSystemBenchmark.ThreadState threadState) {}
+  default void setup(AttributesHolder attributesHolder) {}
 
-  void record(MetricSystemBenchmark.ThreadState threadState, double value, int attributesIndex);
+  void record(AttributesHolder attributesHolder, double value, int attributesIndex);
 
   void collect();
 }

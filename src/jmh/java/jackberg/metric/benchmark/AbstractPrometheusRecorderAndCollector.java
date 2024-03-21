@@ -14,7 +14,7 @@ abstract class AbstractPrometheusRecorderAndCollector implements RecorderAndColl
   protected AbstractPrometheusRecorderAndCollector() {}
 
   @Override
-  public void setup(MetricSystemBenchmark.ThreadState threadState) {
+  public void setup(AttributesHolder attributesHolder) {
     prometheusRegistry = new PrometheusRegistry();
   }
 

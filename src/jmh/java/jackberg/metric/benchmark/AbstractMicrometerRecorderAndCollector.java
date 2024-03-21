@@ -15,7 +15,7 @@ abstract class AbstractMicrometerRecorderAndCollector implements RecorderAndColl
   protected MeterRegistry registry;
 
   @Override
-  public void setup(MetricSystemBenchmark.ThreadState threadState) {
+  public void setup(AttributesHolder attributesHolder) {
     registry = new SimpleMeterRegistry();
     registry
         .config()

@@ -30,7 +30,7 @@ abstract class AbstractOtelRecorderAndCollector implements RecorderAndCollector 
   }
 
   @Override
-  public void setup(MetricSystemBenchmark.ThreadState threadState) {
+  public void setup(AttributesHolder attributesHolder) {
     reader =
         InMemoryMetricReader.builder()
             .setMemoryMode(memoryMode)
