@@ -27,9 +27,7 @@ import org.openjdk.jmh.annotations.Warmup;
 @Fork(1)
 public class CollectBenchmark {
 
-  private static final int cardinality = 100;
-  private static final int measurementsPerSeries = 1_000;
-  static final AttributesHolder attributesHolder = new AttributesHolder(cardinality);
+  static final AttributesHolder attributesHolder = new AttributesHolder();
 
   @State(Scope.Benchmark)
   public static class ThreadState {
@@ -46,7 +44,7 @@ public class CollectBenchmark {
       random = new Random();
       recorderAndCollector.setup(attributesHolder);
       // Record as part of setup so collect doesn't have to muddy waters with record
-      record(this);
+      BenchmarkUtil.record(recorderAndCollector, attributesHolder);
     }
   }
 
@@ -84,14 +82,5 @@ public class CollectBenchmark {
   @Benchmark
   public void collect(ThreadState threadState) {
     threadState.recorderAndCollector.collect();
-  }
-
-  private static void record(ThreadState threadState) {
-    for (int j = 0; j < measurementsPerSeries; j++) {
-      for (int i = 0; i < cardinality; i++) {
-        double value = threadState.random.nextInt(10_000);
-        threadState.recorderAndCollector.record(attributesHolder, value, i);
-      }
-    }
   }
 }

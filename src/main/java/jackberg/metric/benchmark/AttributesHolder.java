@@ -1,5 +1,7 @@
 package jackberg.metric.benchmark;
 
+import static jackberg.metric.benchmark.BenchmarkUtil.cardinality;
+
 import io.micrometer.core.instrument.Tag;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.Attributes;
@@ -15,7 +17,7 @@ class AttributesHolder {
   final List<Tag>[] tagsList;
   final String[] labelValues;
 
-  AttributesHolder(int cardinality) {
+  AttributesHolder() {
     Random random = new Random();
     attributesList = new Attributes[cardinality];
     tagsList = new List[cardinality];

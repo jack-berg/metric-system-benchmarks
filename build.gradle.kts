@@ -17,25 +17,21 @@ dependencies {
     jmh("org.openjdk.jmh:jmh-generator-bytecode:${jmhVersion}")
 
     // micrometer
-    jmh("io.micrometer:micrometer-core:${micrometerVersion}")
-    testImplementation("io.micrometer:micrometer-core:${micrometerVersion}")
+    implementation("io.micrometer:micrometer-core:${micrometerVersion}")
 
     // otel
-    jmh("io.opentelemetry:opentelemetry-sdk:${otelVersion}")
-    jmh("io.opentelemetry:opentelemetry-sdk-testing:${otelVersion}")
-    testImplementation("io.opentelemetry:opentelemetry-sdk:${otelVersion}")
-    testImplementation("io.opentelemetry:opentelemetry-sdk-testing:${otelVersion}")
+    implementation("io.opentelemetry:opentelemetry-sdk:${otelVersion}")
+    implementation("io.opentelemetry:opentelemetry-sdk-testing:${otelVersion}")
 
     // prometheus
-    jmh("io.prometheus:prometheus-metrics-core:${prometheusVersion}")
-    testImplementation("io.prometheus:prometheus-metrics-core:${prometheusVersion}")
+    implementation("io.prometheus:prometheus-metrics-core:${prometheusVersion}")
+
+    // other test dependencies
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}")
 
     // junit
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    // other test dependencies
-    testImplementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}")
 }
 
 jmh {
