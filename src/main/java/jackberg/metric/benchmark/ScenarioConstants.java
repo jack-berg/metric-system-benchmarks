@@ -23,8 +23,8 @@ public class ScenarioConstants {
         private DoubleHistogram doubleHistogram;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           doubleHistogram = sdkMeterProvider.get("meter").histogramBuilder("histogram").build();
         }
 
@@ -44,8 +44,8 @@ public class ScenarioConstants {
         private DoubleHistogram doubleHistogram;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           doubleHistogram = sdkMeterProvider.get("meter").histogramBuilder("histogram").build();
         }
 
@@ -66,8 +66,8 @@ public class ScenarioConstants {
         private DoubleHistogram doubleHistogram;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           doubleHistogram = sdkMeterProvider.get("meter").histogramBuilder("histogram").build();
         }
 
@@ -88,8 +88,8 @@ public class ScenarioConstants {
         private DoubleHistogram doubleHistogram;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           doubleHistogram = sdkMeterProvider.get("meter").histogramBuilder("histogram").build();
         }
 
@@ -106,8 +106,8 @@ public class ScenarioConstants {
         private DoubleCounter doubleCounter;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           doubleCounter =
               sdkMeterProvider.get("meter").counterBuilder("counter").ofDoubles().build();
         }
@@ -124,8 +124,8 @@ public class ScenarioConstants {
         private DoubleCounter doubleCounter;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           doubleCounter =
               sdkMeterProvider.get("meter").counterBuilder("counter").ofDoubles().build();
         }
@@ -145,8 +145,8 @@ public class ScenarioConstants {
         private DoubleHistogram doubleHistogram;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           doubleHistogram = sdkMeterProvider.get("meter").histogramBuilder("histogram").build();
         }
 
@@ -169,8 +169,8 @@ public class ScenarioConstants {
         private DoubleHistogram doubleHistogram;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           doubleHistogram = sdkMeterProvider.get("meter").histogramBuilder("histogram").build();
         }
 
@@ -194,8 +194,8 @@ public class ScenarioConstants {
         private DoubleHistogram doubleHistogram;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           doubleHistogram = sdkMeterProvider.get("meter").histogramBuilder("histogram").build();
         }
 
@@ -219,8 +219,8 @@ public class ScenarioConstants {
         private DoubleHistogram doubleHistogram;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           doubleHistogram = sdkMeterProvider.get("meter").histogramBuilder("histogram").build();
         }
 
@@ -240,8 +240,8 @@ public class ScenarioConstants {
         private DoubleCounter doubleCounter;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           doubleCounter =
               sdkMeterProvider.get("meter").counterBuilder("counter").ofDoubles().build();
         }
@@ -262,8 +262,8 @@ public class ScenarioConstants {
         private DoubleCounter doubleCounter;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           doubleCounter =
               sdkMeterProvider.get("meter").counterBuilder("counter").ofDoubles().build();
         }
@@ -283,7 +283,7 @@ public class ScenarioConstants {
    * reflecting otel default explicit bucket boundaries, assuming tags ARE NOT known ahead of
    * time
    * (i.e. typical http.server.request.duration). See {@link
-   * {@link AbstractMicrometerRecorderAndCollector#setup(AttributesHolder)} for
+   * {@link AbstractMicrometerRecorderAndCollector#setup(AttributesHolder, OtlpEndpoint)} for
    * configuration details.
    */
   static RecorderAndCollector MICROMETER_EXPLICIT_HISTOGRAM_UNKNOWN_TAGS =
@@ -297,16 +297,16 @@ public class ScenarioConstants {
   /**
    * Micrometer recording to summary distribution (i.e. otel histogram) with bucket boundaries
    * reflecting otel default explicit bucket boundaries, assuming tags ARE known ahead of time. See
-   * {@link AbstractMicrometerRecorderAndCollector#setup(AttributesHolder)} for configuration
-   * details.
+   * {@link AbstractMicrometerRecorderAndCollector#setup(AttributesHolder, OtlpEndpoint)} for
+   * configuration details.
    */
   static RecorderAndCollector MICROMETER_EXPLICIT_HISTOGRAM_KNOWN_TAGS =
       new AbstractMicrometerRecorderAndCollector() {
         private DistributionSummary[] summaries;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           summaries = new DistributionSummary[attributeHolder.tagsList.length];
           for (int i = 0; i < attributeHolder.tagsList.length; i++) {
             summaries[i] = registry.summary("histogram", attributeHolder.tagsList[i]);
@@ -334,8 +334,8 @@ public class ScenarioConstants {
         private io.micrometer.core.instrument.Counter[] counters;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           counters = new io.micrometer.core.instrument.Counter[attributeHolder.tagsList.length];
           for (int i = 0; i < attributeHolder.tagsList.length; i++) {
             counters[i] = registry.counter("counter", attributeHolder.tagsList[i]);
@@ -357,8 +357,8 @@ public class ScenarioConstants {
         private Histogram histogram;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           histogram =
               Histogram.builder()
                   .name("histogram")
@@ -382,8 +382,8 @@ public class ScenarioConstants {
         private Histogram histogram;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           histogram =
               Histogram.builder()
                   .name("histogram")
@@ -405,8 +405,8 @@ public class ScenarioConstants {
         private Counter counter;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           counter =
               Counter.builder()
                   .name("counter")
@@ -430,8 +430,8 @@ public class ScenarioConstants {
         private DistributionDataPoint[] histogramPoints;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           Histogram histogram =
               Histogram.builder()
                   .name("histogram")
@@ -459,8 +459,8 @@ public class ScenarioConstants {
         private DistributionDataPoint[] histogramPoints;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           Histogram histogram =
               Histogram.builder()
                   .name("histogram")
@@ -486,8 +486,8 @@ public class ScenarioConstants {
         private CounterDataPoint[] counterPoints;
 
         @Override
-        public void setup(AttributesHolder attributeHolder) {
-          super.setup(attributeHolder);
+        public void setup(AttributesHolder attributeHolder, OtlpEndpoint otlpEndpoint) {
+          super.setup(attributeHolder, otlpEndpoint);
           Counter counter =
               Counter.builder()
                   .name("counter")

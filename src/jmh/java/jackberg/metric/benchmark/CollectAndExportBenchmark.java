@@ -8,7 +8,6 @@ package jackberg.metric.benchmark;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
@@ -18,15 +17,23 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
+import org.testcontainers.containers.GenericContainer;
 
 @BenchmarkMode(Mode.SingleShotTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
-@Measurement(iterations = 5, batchSize = 100)
-@Warmup(iterations = 5, batchSize = 100)
-@Fork(1)
-public class CollectBenchmark {
+@Measurement(iterations = 5, batchSize = 10)
+@Warmup(iterations = 5, batchSize = 10)
+public class CollectAndExportBenchmark {
 
   static final AttributesHolder attributesHolder = new AttributesHolder();
+  static GenericContainer<?> collector;
+  static OtlpEndpoint otlpEndpoint;
+
+  static {
+    collector = BenchmarkUtil.collectorContainer();
+    collector.start();
+    otlpEndpoint = BenchmarkUtil.collectorEndpoint(collector);
+  }
 
   @State(Scope.Benchmark)
   public static class ThreadState {
@@ -39,7 +46,7 @@ public class CollectBenchmark {
     public void setup() {
       recorderAndCollector = scenario.getRecorderAndCollector();
 
-      recorderAndCollector.setup(attributesHolder, null);
+      recorderAndCollector.setup(attributesHolder, otlpEndpoint);
       // Record as part of setup so collect doesn't have to muddy waters with record
       BenchmarkUtil.record(recorderAndCollector, attributesHolder);
     }
@@ -52,9 +59,18 @@ public class CollectBenchmark {
         ScenarioConstants.OTEL_EXPONENTIAL_HISTOGRAM_REUSABLE_DATA_KNOWN_ATTRIBUTES),
     OTEL_COUNTER_REUSABLE_DATA_KNOWN_ATTRIBUTES(
         ScenarioConstants.OTEL_COUNTER_REUSABLE_DATA_KNOWN_ATTRIBUTES),
+
+    OTEL_EXPLICIT_HISTOGRAM_IMMUTABLE_DATA_KNOWN_ATTRIBUTES(
+        ScenarioConstants.OTEL_EXPLICIT_HISTOGRAM_IMMUTABLE_DATA_KNOWN_ATTRIBUTES),
+    OTEL_EXPONENTIAL_HISTOGRAM_IMMUTABLE_DATA_KNOWN_ATTRIBUTES(
+        ScenarioConstants.OTEL_EXPONENTIAL_HISTOGRAM_IMMUTABLE_DATA_KNOWN_ATTRIBUTES),
+    OTEL_COUNTER_IMMUTABLE_DATA_KNOWN_ATTRIBUTES(
+        ScenarioConstants.OTEL_COUNTER_IMMUTABLE_DATA_KNOWN_ATTRIBUTES),
+
     MICROMETER_EXPLICIT_HISTOGRAM_KNOWN_TAGS(
         ScenarioConstants.MICROMETER_EXPLICIT_HISTOGRAM_KNOWN_TAGS),
     MICROMETER_COUNTER_KNOWN_TAGS(ScenarioConstants.MICROMETER_COUNTER_KNOWN_TAGS),
+
     PROMETHEUS_EXPLICT_HISTOGRAM_KNOWN_LABELS(
         ScenarioConstants.PROMETHEUS_EXPLICT_HISTOGRAM_KNOWN_LABELS),
     PROMETHEUS_EXPONENTIAL_HISTOGRAM_KNOWN_LABELS(

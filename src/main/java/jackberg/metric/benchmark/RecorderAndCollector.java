@@ -6,7 +6,7 @@
 package jackberg.metric.benchmark;
 
 interface RecorderAndCollector {
-  default void setup(AttributesHolder attributesHolder) {}
+  default void setup(AttributesHolder attributesHolder, OtlpEndpoint otlpEndpoint) {}
 
   void record(AttributesHolder attributesHolder, double value, int attributesIndex);
 

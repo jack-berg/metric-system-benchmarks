@@ -8,8 +8,9 @@ plugins {
 val jacksonVersion = "2.16.0"
 val jmhVersion = "1.37"
 val micrometerVersion = "1.12.4"
-val otelVersion = "1.35.0"
-val prometheusVersion = "1.0.0"
+val otelVersion = "1.38.0"
+val prometheusVersion = "1.2.1"
+val testContainers = "1.19.8"
 
 dependencies {
     // jmh
@@ -18,16 +19,20 @@ dependencies {
 
     // micrometer
     implementation("io.micrometer:micrometer-core:${micrometerVersion}")
+    implementation("io.micrometer:micrometer-registry-otlp:${micrometerVersion}")
 
     // otel
     implementation("io.opentelemetry:opentelemetry-sdk:${otelVersion}")
     implementation("io.opentelemetry:opentelemetry-sdk-testing:${otelVersion}")
+    implementation("io.opentelemetry:opentelemetry-exporter-otlp:${otelVersion}")
 
     // prometheus
     implementation("io.prometheus:prometheus-metrics-core:${prometheusVersion}")
+    implementation("io.prometheus:prometheus-metrics-exporter-opentelemetry:${prometheusVersion}")
 
     // other test dependencies
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}")
+    implementation("org.testcontainers:testcontainers:${testContainers}")
 
     // junit
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")

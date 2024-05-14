@@ -5,7 +5,6 @@
 
 package jackberg.metric.benchmark;
 
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -36,14 +35,12 @@ public class RecordBenchmark {
     @Param private Scenarios scenario;
 
     private RecorderAndCollector recorderAndCollector;
-    private Random random;
 
     @Setup(Level.Trial)
     public void setup() {
       recorderAndCollector = scenario.getRecorderAndCollector();
 
-      random = new Random();
-      recorderAndCollector.setup(attributesHolder);
+      recorderAndCollector.setup(attributesHolder, null);
     }
   }
 
