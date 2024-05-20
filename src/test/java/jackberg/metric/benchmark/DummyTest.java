@@ -48,7 +48,7 @@ class DummyTest {
   //  private final RecorderAndCollector scenario = PROMETHEUS_EXPLICIT_HISTOGRAM_UNKNOWN_LABELS;
   //  private final RecorderAndCollector scenario = PROMETHEUS_EXPONENTIAL_HISTOGRAM_UNKNOWN_LABELS;
   //  private final RecorderAndCollector scenario = PROMETHEUS_COUNTER_UNKNOWN_LABELS;
-  //  private final RecorderAndCollector scenario = PROMETHEUS_EXPLICT_HISTOGRAM_KNOWN_LABELS;
+  //  private final RecorderAndCollector scenario = PROMETHEUS_EXPLICIT_HISTOGRAM_KNOWN_LABELS;
   //  private final RecorderAndCollector scenario = PROMETHEUS_EXPONENTIAL_HISTOGRAM_KNOWN_LABELS;
   //  private final RecorderAndCollector scenario = PROMETHEUS_COUNTER_KNOWN_LABELS;
 

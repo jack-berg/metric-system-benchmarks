@@ -5,7 +5,6 @@
 
 package jackberg.metric.benchmark;
 
-import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -17,17 +16,31 @@ import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Threads;
+import org.openjdk.jmh.annotations.TearDown;
 import org.openjdk.jmh.annotations.Warmup;
+import org.testcontainers.containers.GenericContainer;
 
-@BenchmarkMode(Mode.SingleShotTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
-@Measurement(iterations = 5, batchSize = 100)
-@Warmup(iterations = 5, batchSize = 100)
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.SECONDS)
+@Measurement(time = 5, timeUnit = TimeUnit.SECONDS)
+@Warmup(time = 1, timeUnit = TimeUnit.SECONDS)
 @Fork(1)
-public class RecordBenchmark {
+public class RaceBenchmark {
 
   static final AttributesHolder attributesHolder = new AttributesHolder();
+  static GenericContainer<?> collector;
+  static OtlpEndpoint otlpEndpoint;
+
+  static {
+    collector = BenchmarkUtil.collectorContainer();
+    collector.start();
+    otlpEndpoint = BenchmarkUtil.collectorEndpoint(collector);
+  }
 
   @State(Scope.Benchmark)
   public static class ThreadState {
@@ -35,12 +48,26 @@ public class RecordBenchmark {
     @Param private Scenarios scenario;
 
     private RecorderAndCollector recorderAndCollector;
+    private ScheduledExecutorService scheduledExecutorService;
+    private ScheduledFuture<?> future;
 
     @Setup(Level.Trial)
     public void setup() {
       recorderAndCollector = scenario.getRecorderAndCollector();
+      scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
 
-      recorderAndCollector.setup(attributesHolder, null);
+      recorderAndCollector.setup(attributesHolder, otlpEndpoint);
+      future = scheduledExecutorService.scheduleAtFixedRate(
+          recorderAndCollector::collect, 0, 100, TimeUnit.MILLISECONDS);
+
+      // Record as part of setup so collect doesn't have to muddy waters with record
+      BenchmarkUtil.record(recorderAndCollector, attributesHolder);
+    }
+
+    @TearDown(Level.Trial)
+    public void teardown() {
+      future.cancel(true);
+      scheduledExecutorService.shutdown();
     }
   }
 
@@ -98,22 +125,11 @@ public class RecordBenchmark {
   }
 
   /**
-   * Profiles the time to record measurements in a single threaded environment. The most useful
-   * benchmark metrics are the time score (i.e. ns/op), and {@code gc.alloc.rate.norm}.
+   * Profiles the memory cost of collecting data. The most useful benchmark metrics is {@code
+   * gc.alloc.rate.norm}.
    */
   @Benchmark
-  @Threads(1)
-  public void recordOneThread(ThreadState threadState) {
-    BenchmarkUtil.record(threadState.recorderAndCollector, attributesHolder);
-  }
-
-  /**
-   * Profiles the time to record measurements in a multi threaded environment. The most useful
-   * benchmark metrics are the time score (i.e. ns/op), and {@code gc.alloc.rate.norm}.
-   */
-  @Benchmark
-  @Threads(4)
-  public void recordFourThreads(ThreadState threadState) {
+  public void record(ThreadState threadState) {
     BenchmarkUtil.record(threadState.recorderAndCollector, attributesHolder);
   }
 }
