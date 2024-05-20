@@ -425,7 +425,7 @@ public class ScenarioConstants {
    * Prometheus recording to histogram with explicit bucket boundaries aligned to Otel defaults with
    * known labels.
    */
-  static RecorderAndCollector PROMETHEUS_EXPLICT_HISTOGRAM_KNOWN_LABELS =
+  static RecorderAndCollector PROMETHEUS_EXPLICIT_HISTOGRAM_KNOWN_LABELS =
       new AbstractPrometheusRecorderAndCollector() {
         private DistributionDataPoint[] histogramPoints;
 
